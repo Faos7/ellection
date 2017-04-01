@@ -29,8 +29,9 @@ public class Candidate implements Serializable{
     @Column(name = "third_name")
     private String thirdName;
 
-    @Column
-    private String foto;
+    @Lob
+    @Column(columnDefinition="bytea")
+    private byte[] image;
 
     @Column
     private Long mainVotesNumber;
@@ -38,25 +39,29 @@ public class Candidate implements Serializable{
     @Column
     private Long secVoiceNumber;
 
-
+/*
     @ManyToMany(mappedBy = "candidates_pull")
     private Set<Position> positionsPull;
+*/
+
+    @OneToMany(mappedBy = "candidate")
+    public Set<Candidates_Pull> positionsPull;
 
     public Candidate(String firstName, String secondName, String thirdName,
-                     String foto, Set<Position> positionsPull) {
+                     byte[] image, Set<Candidates_Pull> positionsPull) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.thirdName = thirdName;
-        this.foto = foto;
+        this.image = image;
         this.mainVotesNumber = 0L;
         this.secVoiceNumber = 0L;
         this.positionsPull = positionsPull;
     }
-
+/*
     public void addToPositionPull(Position position){
         positionsPull.add(position);
     }
-
+*/
     public Long getId() {
         return id;
     }
@@ -89,12 +94,12 @@ public class Candidate implements Serializable{
         this.thirdName = thirdName;
     }
 
-    public String getFoto() {
-        return foto;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setFoto(String foto) {
-        this.foto = foto;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public Long getMainVotesNumber() {
@@ -112,13 +117,13 @@ public class Candidate implements Serializable{
     public void setSecVoiceNumber(Long secVoiceNumber) {
         this.secVoiceNumber = secVoiceNumber;
     }
-    public Set<Position> getPositionsPull() {
+
+
+    public Set<Candidates_Pull> getPositionsPull() {
         return positionsPull;
     }
 
-    public void setPositionsPull(Set<Position> positionsPull) {
+    public void setPositionsPull(Set<Candidates_Pull> positionsPull) {
         this.positionsPull = positionsPull;
     }
-
-
 }

@@ -3,6 +3,7 @@ package com.ellection.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by faos7 on 30.03.17.
@@ -27,26 +28,30 @@ public class Position implements Serializable {
     @Column
     private Candidate winner;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Candidates_Pull>  candidates_pull;
+
+
+    /*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "candidate_pull", joinColumns = @JoinColumn(name = "pos_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "cand_id", referencedColumnName = "id"))
-    private List<Candidate> candidates_pull;
+    private List<Candidate> candidates_pull;*/
 
     public Position(String name, String place) {
         this.name = name;
         this.place = place;
     }
 
-    public Position(String name, String place, List<Candidate> candidates_pull) {
+    public Position(String name, String place, Set<Candidates_Pull> candidates_pull) {
         this.name = name;
         this.place = place;
         this.candidates_pull = candidates_pull;
     }
-
+/*
     public void addCandidateToPull(Candidate candidate){
         candidates_pull.add(candidate);
     }
-
+*/
     public Long getId() {
         return id;
     }
@@ -79,11 +84,11 @@ public class Position implements Serializable {
         this.winner = winner;
     }
 
-    public List<Candidate> getCandidates_pull() {
+    public Set<Candidates_Pull> getCandidates_pull() {
         return candidates_pull;
     }
 
-    public void setCandidates_pull(List<Candidate> candidates_pull) {
+    public void setCandidates_pull(Set<Candidates_Pull> candidates_pull) {
         this.candidates_pull = candidates_pull;
     }
 
@@ -94,7 +99,7 @@ public class Position implements Serializable {
                 ", name='" + name + '\'' +
                 ", place='" + place + '\'' +
                 ", winner=" + winner +
-                ", candidates_pull=" + candidates_pull +
+                //", candidates_pull=" + candidates_pull +
                 '}';
     }
 }

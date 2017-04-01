@@ -1,7 +1,9 @@
 package com.ellection.service;
 
 import com.ellection.models.Candidate;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import java.util.Collection;
 
 /**
@@ -10,6 +12,6 @@ import java.util.Collection;
 public interface CandidateService {
     Collection<Candidate> getAllCandidates();
     Candidate getOneById(Long id);
-
+    Candidate save( MultipartFile file, String firstName, String secondName, String thirdName);
 
 }
