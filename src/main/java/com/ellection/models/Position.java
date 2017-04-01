@@ -2,14 +2,14 @@ package com.ellection.models;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by faos7 on 30.03.17.
  */
 
 @Entity
-@Table(name = "position")
+@Table
 public class Position implements Serializable {
 
     @Id
@@ -22,31 +22,33 @@ public class Position implements Serializable {
     private String name;
 
     @Column
-    private String place;
+    private User winner;
 
-    @Column
-    private Candidate winner;
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Candidates_Pull>  candidates_pull;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    /*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "candidate_pull", joinColumns = @JoinColumn(name = "pos_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "cand_id", referencedColumnName = "id"))
-    private List<Candidate> candidates_pull;
+    private List<User> candidates_pull;*/
 
-    public Position(String name, String place) {
-        this.name = name;
-        this.place = place;
+    public Position() {
     }
 
-    public Position(String name, String place, List<Candidate> candidates_pull) {
+    public Position(String name) {
         this.name = name;
-        this.place = place;
+    }
+
+    public Position(String name, Set<Candidates_Pull> candidates_pull) {
+        this.name = name;
         this.candidates_pull = candidates_pull;
     }
-
-    public void addCandidateToPull(Candidate candidate){
+/*
+    public void addCandidateToPull(User candidate){
         candidates_pull.add(candidate);
     }
-
+*/
     public Long getId() {
         return id;
     }
@@ -63,38 +65,44 @@ public class Position implements Serializable {
         this.name = name;
     }
 
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public Candidate getWinner() {
+    public User getWinner() {
         return winner;
     }
 
-    public void setWinner(Candidate winner) {
+    public void setWinner(User winner) {
         this.winner = winner;
     }
 
-    public List<Candidate> getCandidates_pull() {
+    public Candidates_Pull addCandidatetoPull(User user){
+        Candidates_Pull cp = new Candidates_Pull(user, this, 0);
+        candidates_pull.add(cp);
+        return cp;
+    }
+
+    public Candidates_Pull removeCandidateFromPull(User user){
+        for (Candidates_Pull cp : candidates_pull){
+            if (cp.getPosition().equals(this) && cp.getUser().equals(user)){
+                candidates_pull.remove(cp);
+                return cp;
+            }
+        }
+        return null;
+    }
+
+    public Set<Candidates_Pull> getCandidates_pull() {
         return candidates_pull;
     }
 
-    public void setCandidates_pull(List<Candidate> candidates_pull) {
+    public void setCandidates_pull(Set<Candidates_Pull> candidates_pull) {
         this.candidates_pull = candidates_pull;
     }
 
     @Override
     public String toString() {
         return "Position{" +
-                "id=" + id +
                 ", name='" + name + '\'' +
-                ", place='" + place + '\'' +
                 ", winner=" + winner +
-                ", candidates_pull=" + candidates_pull +
+                //", candidates_pull=" + candidates_pull +
                 '}';
     }
 }
