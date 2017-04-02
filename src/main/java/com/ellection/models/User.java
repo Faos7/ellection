@@ -192,6 +192,10 @@ public class User implements Serializable{
         positionsPull.add(cp);
     }
 
+    public void addToVotesSet(Candidates_Pull candidates_pull){
+        votingPull.add(candidates_pull.getPosition());
+    }
+
     public void removeCandidateFromPositionPull(Candidates_Pull cp){
         positionsPull.remove(cp);
     }

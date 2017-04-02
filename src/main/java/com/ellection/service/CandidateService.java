@@ -1,6 +1,8 @@
 package com.ellection.service;
 
+import com.ellection.models.CurrentUser;
 import com.ellection.models.User;
+import org.omg.CORBA.Current;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
@@ -13,4 +15,7 @@ public interface CandidateService {
     User setFoto(MultipartFile file, Long id);
     void addCandidateToPosition(String username, String role);
     void removeCandidateFromPosition(String username, String role);
+    void voteFor(CurrentUser currentUser, String username, String name);
+
+    User getUserByUsername(String username);
 }

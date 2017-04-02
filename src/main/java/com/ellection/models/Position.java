@@ -27,12 +27,6 @@ public class Position implements Serializable {
     @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Candidates_Pull>  candidates_pull;
 
-
-    /*@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "candidate_pull", joinColumns = @JoinColumn(name = "pos_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "cand_id", referencedColumnName = "id"))
-    private List<User> candidates_pull;*/
-
     public Position() {
     }
 
@@ -44,11 +38,7 @@ public class Position implements Serializable {
         this.name = name;
         this.candidates_pull = candidates_pull;
     }
-/*
-    public void addCandidateToPull(User candidate){
-        candidates_pull.add(candidate);
-    }
-*/
+
     public Long getId() {
         return id;
     }
@@ -77,6 +67,25 @@ public class Position implements Serializable {
         Candidates_Pull cp = new Candidates_Pull(user, this, 0);
         candidates_pull.add(cp);
         return cp;
+    }
+
+    public Candidates_Pull FindPull(User user){
+        for (Candidates_Pull cp : candidates_pull){
+            if (cp.getPosition().equals(this) && cp.getUser().equals(user)){
+                return cp;
+            }
+        }
+        return null;
+    }
+
+    public Candidates_Pull VoteForCandidate(User user){
+        for (Candidates_Pull cp : candidates_pull){
+            if (cp.getPosition().equals(this) && cp.getUser().equals(user)){
+                cp.setVoices(cp.getVoices() +1);
+                return cp;
+            }
+        }
+        return null;
     }
 
     public Candidates_Pull removeCandidateFromPull(User user){

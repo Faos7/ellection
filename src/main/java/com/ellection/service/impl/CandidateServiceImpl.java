@@ -1,5 +1,6 @@
 package com.ellection.service.impl;
 
+import com.ellection.models.CurrentUser;
 import com.ellection.models.Position;
 import com.ellection.models.User;
 import com.ellection.repository.PositionRepository;
@@ -8,6 +9,7 @@ import com.ellection.service.CandidateService;
 import com.ellection.service.ImageService;
 import com.ellection.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
@@ -15,6 +17,8 @@ import java.util.Collection;
 /**
  * Created by faos7 on 31.03.17.
  */
+
+@Service
 public class CandidateServiceImpl implements CandidateService{
 
     UserRepository userRepository;
@@ -61,5 +65,22 @@ public class CandidateServiceImpl implements CandidateService{
         user.removeCandidateFromPositionPull(position.removeCandidateFromPull(user));
         userRepository.save(user);
         positionRepository.save(position);
+    }
+
+    @Override
+    public void voteFor(CurrentUser currentUser, String username, String name) {
+        User user = userRepository.findOneByUsername(username).get();
+        Position position = positionRepository.findOneByName(name).get();
+        if(!currentUser.getUser().getVotingPull().contains(position)){
+            currentUser.getUser().addToVotesSet(position.VoteForCandidate(user));
+        }
+        userRepository.save(user);
+        userRepository.save(currentUser.getUser());
+        positionRepository.save(position);
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findOneByUsername(username).get();
     }
 }
