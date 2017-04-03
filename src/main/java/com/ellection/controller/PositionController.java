@@ -35,9 +35,16 @@ public class PositionController {
         return new ResponseEntity<>( service.create(name), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{name}")
+    @RequestMapping(method = RequestMethod.GET, value = "/w/{name}")
     public ResponseEntity<User> getWinnerForPos(@PathVariable String name){
 
         return new ResponseEntity<>(service.getWinner(name), HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<Position> deletePosition(@PathVariable @RequestParam String name){
+        return new ResponseEntity<Position>(service.remove(name), HttpStatus.OK);
+    }
+
+
 }
